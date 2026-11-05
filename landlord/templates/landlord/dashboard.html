@@ -1,0 +1,369 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- ========================================================= -->
+<!-- DASHBOARD HEADER                                          -->
+<!-- ========================================================= -->
+<div class="dashboard-header">
+    <div>
+        <h1>Welcome back, {{ user.landlord_profile.full_name|default:user.email }} </h1>
+        <p class="subtitle">Here's what's happening with your rooms today.</p>
+    </div>
+    <div class="status-badge 
+        {% if user.landlord.verification_status == 'verified' %}status-verified
+        {% elif user.landlord.verification_status == 'pending' %}status-pending
+        {% elif user.landlord.verification_status == 'rejected' %}status-rejected
+        {% else %}status-suspended{% endif %}">
+        {% if user.landlord.verification_status == 'verified' %}
+             Verified
+        {% elif user.landlord.verification_status == 'pending' %}
+             Pending Approval
+        {% elif user.landlord.verification_status == 'rejected' %}
+             Rejected
+        {% else %}
+             Suspended
+        {% endif %}
+    </div>
+</div>
+
+<!-- ========================================================= -->
+<!-- STATS CARDS                                               -->
+<!-- ========================================================= -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon"></div>
+        <div class="stat-info">
+            <span class="stat-number">{{ total_rooms|default:"0" }}</span>
+            <span class="stat-label">Total Rooms</span>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon"></div>
+        <div class="stat-info">
+            <span class="stat-number">{{ pending_rooms|default:"0" }}</span>
+            <span class="stat-label">Pending Approval</span>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon"></div>
+        <div class="stat-info">
+            <span class="stat-number">{{ approved_rooms|default:"0" }}</span>
+            <span class="stat-label">Approved Rooms</span>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon"></div>
+        <div class="stat-info">
+            <span class="stat-number">{{ unread_messages|default:"0" }}</span>
+            <span class="stat-label">Unread Messages</span>
+        </div>
+    </div>
+</div>
+
+<!-- ========================================================= -->
+<!-- QUICK ACTIONS                                             -->
+<!-- ========================================================= -->
+<div class="section-title">
+    <h2> Quick Actions</h2>
+</div>
+
+<div class="actions-grid">
+    <a href="{% url 'landlord:post_room' %}" class="action-card">
+        <div class="action-icon"></div>
+        <h3>Post a Room</h3>
+        <p>List a new room for rent</p>
+    </a>
+
+    <a href="/landlord/rooms/my-listings/" class="action-card">
+        <div class="action-icon"></div>
+        <h3>My Listings</h3>
+        <p>View and manage your rooms</p>
+    </a>
+
+    <a href="/landlord/messages/" class="action-card">
+        <div class="action-icon"></div>
+        <h3>Messages</h3>
+        <p>Chat with interested tenants</p>
+    </a>
+
+    <a href="/landlord/profile/" class="action-card">
+        <div class="action-icon"></div>
+        <h3>My Profile</h3>
+        <p>Update your account details</p>
+    </a>
+</div>
+
+<!-- ========================================================= -->
+<!-- ACCOUNT STATUS NOTICE                                     -->
+<!-- ========================================================= -->
+{% if user.landlord.verification_status == 'pending' %}
+<div class="alert alert-warning">
+     Your account is pending admin approval. You will be notified once your account has been verified.
+</div>
+{% elif user.landlord.verification_status == 'rejected' %}
+<div class="alert alert-error">
+     Your account was rejected. Please contact support for more information.
+</div>
+{% elif user.landlord.verification_status == 'suspended' %}
+<div class="alert alert-error">
+     Your account has been suspended. Please contact support.
+</div>
+{% endif %}
+
+<!-- ========================================================= -->
+<!-- RECENT ACTIVITY (Placeholder)                             -->
+<!-- ========================================================= -->
+<div class="section-title">
+    <h2> Recent Activity</h2>
+</div>
+
+<div class="activity-list">
+    <!-- <div class="activity-item">
+        <span class="activity-icon"></span>
+        <div>
+            <p><strong>Room at 123 Main St</strong> was approved </p>
+            <span class="activity-time">2 days ago</span>
+        </div>
+    </div>
+    <div class="activity-item">
+        <span class="activity-icon"></span>
+        <div>
+            <p><strong>New message</strong> from a tenant</p>
+            <span class="activity-time">1 hour ago</span>
+        </div>
+    </div>
+    <div class="activity-item">
+        <span class="activity-icon"></span>
+        <div>
+            <p><strong>Room at 45 Oak Ave</strong> is pending approval</p>
+            <span class="activity-time">5 days ago</span>
+        </div>
+    </div> -->
+</div>
+
+<!-- ========================================================= -->
+<!-- DASHBOARD STYLES                                          -->
+<!-- ========================================================= -->
+<style>
+    /* ---------- DASHBOARD HEADER ---------- */
+    .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .dashboard-header h1 {
+        font-size: 2rem;
+        font-weight: 600;
+        color: #222;
+        margin-bottom: 0.2rem;
+    }
+
+    .dashboard-header .subtitle {
+        color: #6b6b6b;
+        font-size: 1rem;
+    }
+
+    /* ---------- STATUS BADGE ---------- */
+    .status-badge {
+        padding: 0.5rem 1.2rem;
+        border-radius: 30px;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    .status-verified {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .status-pending {
+        background: #fff3cd;
+        color: #856404;
+    }
+
+    .status-rejected {
+        background: #f8d7da;
+        color: #721c24;
+    }
+
+    .status-suspended {
+        background: #e2e3e5;
+        color: #383d41;
+    }
+
+    /* ---------- STATS GRID ---------- */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2.5rem;
+    }
+
+    .stat-card {
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+        border: 1px solid #f0f0f0;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    .stat-icon {
+        font-size: 2rem;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #fef2f2;
+        border-radius: 12px;
+    }
+
+    .stat-info {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .stat-number {
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: #ff5a5f;
+    }
+
+    .stat-label {
+        font-size: 0.9rem;
+        color: #6b6b6b;
+    }
+
+    /* ---------- SECTION TITLE ---------- */
+    .section-title {
+        margin-bottom: 1rem;
+    }
+
+    .section-title h2 {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #222;
+    }
+
+    /* ---------- QUICK ACTIONS ---------- */
+    .actions-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2.5rem;
+    }
+
+    .action-card {
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 1.8rem 1.5rem;
+        text-align: center;
+        text-decoration: none;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+        border: 1px solid #f0f0f0;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .action-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        border-color: #ff5a5f;
+    }
+
+    .action-icon {
+        font-size: 2rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .action-card h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #222;
+        margin-bottom: 0.3rem;
+    }
+
+    .action-card p {
+        font-size: 0.9rem;
+        color: #6b6b6b;
+    }
+
+    /* ---------- ACTIVITY LIST ---------- */
+    .activity-list {
+        background: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+        border: 1px solid #f0f0f0;
+        overflow: hidden;
+    }
+
+    .activity-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #f7f7f7;
+    }
+
+    .activity-item:last-child {
+        border-bottom: none;
+    }
+
+    .activity-icon {
+        font-size: 1.5rem;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #fef2f2;
+        border-radius: 10px;
+    }
+
+    .activity-item p {
+        font-size: 0.95rem;
+        color: #333;
+        margin-bottom: 0.1rem;
+    }
+
+    .activity-time {
+        font-size: 0.8rem;
+        color: #999;
+    }
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width: 768px) {
+        .dashboard-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .dashboard-header h1 {
+            font-size: 1.6rem;
+        }
+
+        .stats-grid,
+        .actions-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+{% endblock %}

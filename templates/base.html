@@ -1,0 +1,552 @@
+<!-- ==================== base.html ==================== -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RoomRental Platform</title>
+    <style>
+        /* ---------- RESET ---------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f7f7f7;
+            color: #222;
+            line-height: 1.5;
+        }
+
+        /* ---------- NAVIGATION (Airbnb style) ---------- */
+        .navbar {
+            background: #ffffff;
+            padding: 0.8rem 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            border-bottom: 1px solid #eaeaea;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .navbar .brand .logo {
+            height: 40px;
+            width: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #ff5a5f;
+        }
+
+        .navbar .brand a {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #ff5a5f;
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+
+        .navbar .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            flex-wrap: wrap;
+        }
+
+        .navbar .nav-links a {
+            color: #222;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.6rem 1rem;
+            border-radius: 30px;
+            transition: background 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .navbar .nav-links a:hover {
+            background: #f0f0f0;
+        }
+
+        .navbar .nav-links .btn-outline {
+            border: 1px solid #ddd;
+            background: transparent;
+            padding: 0.5rem 1.2rem;
+            border-radius: 30px;
+        }
+
+        .navbar .nav-links .btn-outline:hover {
+            background: #f7f7f7;
+            border-color: #bbb;
+        }
+
+        .navbar .nav-links .btn-primary-nav {
+            background: #ff5a5f;
+            color: white;
+            padding: 0.5rem 1.4rem;
+            border-radius: 30px;
+        }
+
+        .navbar .nav-links .btn-primary-nav:hover {
+            background: #e0484d;
+        }
+
+        /* ---------- CONTAINER ---------- */
+        .container {
+            max-width: 1200px;
+            margin: 2.5rem auto;
+            padding: 0 1.5rem;
+        }
+
+        /* ---------- TWO COLUMN LAYOUT ---------- */
+        .register-wrapper {
+            display: flex;
+            gap: 2rem;
+            align-items: stretch;
+            min-height: 600px;
+        }
+
+        .register-wrapper .card {
+            flex: 1.2;
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 2.5rem 2.8rem;
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
+            border: 1px solid #f0f0f0;
+            margin-bottom: 0;
+        }
+
+        .register-wrapper .side-image {
+            flex: 0.8;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
+            border: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+        }
+
+        .register-wrapper .side-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* ---------- ALERTS / MESSAGES ---------- */
+        .alert {
+            padding: 0.75rem 1.25rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+        }
+
+        .alert-info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        /* ---------- CARD STYLES ---------- */
+        .card h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            margin-bottom: 0.3rem;
+            color: #222;
+        }
+
+        .card .subtitle {
+            color: #6b6b6b;
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.2rem;
+            border-bottom: 1px solid #efefef;
+        }
+
+        /* ---------- FORMS ---------- */
+        .form-group {
+            margin-bottom: 1.4rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            font-size: 0.95rem;
+            margin-bottom: 0.3rem;
+            color: #1e1e1e;
+        }
+
+        .form-group label .required-star {
+            color: #ff0000;
+            margin-left: 2px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid #d0d0d0;
+            border-radius: 12px;
+            font-size: 1rem;
+            background: #fafafa;
+            transition: border 0.2s, box-shadow 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #ff5a5f;
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(255, 90, 95, 0.08);
+            background: #ffffff;
+        }
+
+        .form-group .help-text {
+            font-size: 0.8rem;
+            color: #777;
+            margin-top: 0.25rem;
+        }
+
+        .form-group input[type="file"] {
+            padding: 0.7rem 0.8rem;
+            background: #f4f4f4;
+            border-radius: 12px;
+            border: 1px dashed #c0c0c0;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .form-group input[type="file"]:hover {
+            background: #f0f0f0;
+            border-color: #ff5a5f;
+        }
+
+        .form-group.checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.7rem;
+            margin-top: 1.8rem;
+        }
+
+        .form-group.checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
+            accent-color: #ff5a5f;
+            flex-shrink: 0;
+        }
+
+        .form-group.checkbox-group label {
+            display: inline;
+            font-weight: 400;
+            font-size: 0.95rem;
+            color: #333;
+        }
+
+        .form-group.checkbox-group a {
+            color: #ff5a5f;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .form-group.checkbox-group a:hover {
+            text-decoration: underline;
+        }
+
+        /* ---------- BUTTONS ---------- */
+        .btn {
+            display: inline-block;
+            padding: 0.9rem 2rem;
+            border: none;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.05s, box-shadow 0.2s;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: #ff5a5f;
+            color: white;
+            box-shadow: 0 4px 12px rgba(255, 90, 95, 0.25);
+        }
+
+        .btn-primary:hover {
+            background: #e0484d;
+            transform: scale(1.01);
+            box-shadow: 0 6px 16px rgba(255, 90, 95, 0.3);
+        }
+
+        .btn-block {
+            width: 100%;
+            display: block;
+            padding: 1rem;
+            font-size: 1.05rem;
+        }
+
+        /* ---------- UTILITY ---------- */
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-1 { margin-top: 0.5rem; }
+        .mt-2 { margin-top: 1rem; }
+        .mt-3 { margin-top: 1.5rem; }
+        .mb-1 { margin-bottom: 0.5rem; }
+        .mb-2 { margin-bottom: 1rem; }
+        .mb-3 { margin-bottom: 1.5rem; }
+
+        .text-muted {
+            color: #6c757d;
+        }
+
+        /* ---------- FOOTER ---------- */
+        .footer {
+            background: #ffffff;
+            border-top: 1px solid #eaeaea;
+            color: #555;
+            text-align: center;
+            padding: 1.8rem;
+            margin-top: 3rem;
+            font-size: 0.9rem;
+        }
+
+        /* ---------- RESPONSIVE ---------- */
+        @media (max-width: 900px) {
+            .register-wrapper {
+                flex-direction: column;
+            }
+            
+            .register-wrapper .side-image {
+                min-height: 250px;
+                max-height: 350px;
+                order: -1;
+            }
+            
+            .register-wrapper .card {
+                padding: 1.8rem 1.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0.8rem 1.5rem;
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            .navbar .nav-links {
+                gap: 0.1rem;
+                justify-content: center;
+            }
+            .navbar .nav-links a {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.85rem;
+            }
+            .container {
+                padding: 0 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .register-wrapper .card {
+                padding: 1.2rem 1rem;
+            }
+            .form-group input,
+            .form-group select {
+                padding: 0.7rem 0.9rem;
+            }
+        }
+
+/* ---------- DROPDOWN ---------- */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-btn {
+    background: transparent;
+    border: 1px solid #ddd;
+    color: #222;
+    padding: 0.5rem 1.2rem;
+    border-radius: 30px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: background 0.2s;
+}
+
+.dropdown-btn:hover {
+    background: #f7f7f7;
+    border-color: #bbb;
+}
+
+.dropdown-btn .caret {
+    font-size: 0.6rem;
+    color: #666;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #ffffff;
+    min-width: 200px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    border-radius: 12px;
+    border: 1px solid #f0f0f0;
+    z-index: 200;
+    overflow: hidden;
+    margin-top: 0.5rem;
+}
+
+.dropdown-content a {
+    color: #222;
+    padding: 0.75rem 1.2rem;
+    text-decoration: none;
+    display: block;
+    font-size: 0.9rem;
+    transition: background 0.15s;
+}
+
+.dropdown-content a:hover {
+    background: #f7f7f7;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* ---------- NAV ICON LINKS ---------- */
+.nav-icon-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    color: #222;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.6rem 1rem;
+    border-radius: 30px;
+    transition: background 0.2s;
+    font-size: 0.9rem;
+}
+
+.nav-icon-link:hover {
+    background: #f0f0f0;
+}
+
+.nav-icon {
+    font-size: 1rem;
+}
+        
+        
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="brand">
+            <!-- Logo placeholder - you can add your logo here -->
+            <img 
+                src="{% static 'landlord/images/logo.png' %}" 
+                alt="RoomRental Logo" 
+                class="logo"
+                onerror="this.src='https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=80&h=80&fit=crop&crop=center'"
+            >
+            <a href="/">RoomRental</a>
+        </div>
+<div class="nav-links">
+    <a href="/">Home</a>
+
+    {% if user.is_authenticated %}
+        <!-- Messages -->
+        <a href="/messages/" class="nav-icon-link">
+            <span class="nav-icon"></span> Messages
+        </a>
+
+        <!-- Profile Dropdown -->
+        <div class="dropdown">
+            <button class="dropdown-btn">
+                <span class="nav-icon"></span> Profile
+                <span class="caret"></span>
+            </button>
+            <div class="dropdown-content">
+                {% if user.role == 'landlord' %}
+                    <a href="/landlord/dashboard/">Landlord Dashboard</a>
+                    <a href="/landlord/rooms/my-listings/">My Listings</a>
+                    <a href="/landlord/rooms/post/">Post a Room</a>
+                    <a href="/landlord/profile/">My Profile</a>
+                    <a href="/landlord/logout/">Logout</a>
+                {% elif user.role == 'tenant' %}
+                    <a href="/tenant/dashboard/">Tenant Dashboard</a>
+                    <a href="/tenant/profile/">My Profile</a>
+                    <a href="/landlord/logout/">Logout</a>
+                {% endif %}
+            </div>
+        </div>
+    {% else %}
+        <a href="/landlord/login/" class="btn-outline">Landlord Login</a>
+        <a href="/landlord/register/" class="btn-primary-nav">Register</a>
+        <a href="/tenant/login/" class="btn-outline">Tenant Login</a>
+    {% endif %}
+</div>
+    </nav>
+
+    <div class="container">
+
+        <!-- Display Messages (Success, Error, Info) -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{% if message.tags == 'error' %}error{% elif message.tags == 'warning' %}warning{% elif message.tags == 'info' %}info{% else %}success{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% block content %}
+        {% endblock %}
+
+    </div>
+
+    <div class="footer">
+        RoomRental &copy; 2026 · All rights reserved.
+    </div>
+
+</body>
+</html>

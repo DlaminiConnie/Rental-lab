@@ -1,0 +1,95 @@
+<!-- ==================== landlord/register.html ==================== -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="register-wrapper">
+    <!-- Left side: Registration Form -->
+    <div class="card">
+        <h2>Register as a Landlord</h2>
+        <p class="subtitle">Create an account to list your rooms and connect with tenants.</p>
+
+        <form method="POST" enctype="multipart/form-data" action="{% url 'landlord:register' %}">
+            {% csrf_token %}
+
+            <h3 style="font-size: 1.1rem; font-weight: 600; margin-top: 1.8rem; margin-bottom: 0.3rem; color: #222;">Personal Information</h3>
+            <hr style="border: 0; border-top: 1px solid #ececec; margin: 0.8rem 0 1.5rem 0;">
+
+            <div class="form-group">
+                <label for="full_name">Full Name <span class="required-star">*</span></label>
+                <input type="text" id="full_name" name="full_name" placeholder="e.g., Azwi" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address <span class="required-star">*</span></label>
+                <input type="email" id="email" name="email" placeholder="e.g., azwi@example.com" required>
+                <div class="help-text">This will be used for login</div>
+            </div>
+
+            <div class="form-group">
+                <label for="phone_number">Phone Number <span class="required-star">*</span></label>
+                <input type="tel" id="phone_number" name="phone_number" placeholder="e.g., 082 123 4567" required>
+                <div class="help-text">South African phone number</div>
+            </div>
+
+            <div class="form-group">
+                <label for="date_of_birth">Date of Birth <span class="required-star">*</span></label>
+                <input type="date" id="date_of_birth" name="date_of_birth" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password <span class="required-star">*</span></label>
+                <input type="password" id="password" name="password" placeholder="Enter password" required>
+                <div class="help-text">Minimum 8 characters with at least one number</div>
+            </div>
+
+            <div class="form-group">
+                <label for="confirm_password">Confirm Password <span class="required-star">*</span></label>
+                <input type="password" id="confirm_password" name="confirm_password" placeholder="Re-enter password" required>
+            </div>
+
+            <h3 style="font-size: 1.1rem; font-weight: 600; margin-top: 1.8rem; margin-bottom: 0.3rem; color: #222;">Identity Verification</h3>
+            <hr style="border: 0; border-top: 1px solid #ececec; margin: 0.8rem 0 1.5rem 0;">
+            <p class="text-muted" style="color: #6b6b6b; font-size: 0.95rem; margin-bottom: 1.5rem;">
+                Please upload clear images of your documents. These will be verified by our team.
+            </p>
+
+            <div class="form-group">
+                <label for="id_document">Upload ID Document <span class="required-star">*</span></label>
+                <input type="file" id="id_document" name="id_document" accept=".jpg,.jpeg,.png,.pdf" required>
+                <div class="help-text">Accepted: JPEG, PNG, PDF (max 5MB)</div>
+            </div>
+
+            <div class="form-group">
+                <label for="selfie_photo">Upload Selfie Photo <span class="required-star">*</span></label>
+                <input type="file" id="selfie_photo" name="selfie_photo" accept=".jpg,.jpeg,.png" required>
+                <div class="help-text">Accepted: JPEG, PNG (max 5MB)</div>
+            </div>
+
+            <div class="form-group checkbox-group">
+                <input type="checkbox" id="terms" name="terms" required>
+                <label for="terms">
+                    I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+                </label>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">Register as Landlord</button>
+        </form>
+
+        <p class="text-center mt-3" style="border-top: 1px solid #efefef; padding-top: 1.8rem; color: #555;">
+            Already have an account? <a href="{% url 'landlord:login' %}" style="color: #ff5a5f; font-weight: 500;">Login here</a>
+        </p>
+    </div>
+
+    <!-- Right side: Local image
+    <div class="side-image">
+        <img 
+            src="/landlord/templates/landlord/images/reg_bg.jpg" 
+            alt="Property listing"
+            style="width: 100%; height: 100%; object-fit: cover;"
+        >
+    </div> -->
+</div>
+
+{% endblock %}

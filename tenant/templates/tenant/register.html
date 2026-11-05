@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="card" style="max-width: 700px; margin: 0 auto;">
+    <h2 class="text-center">🔍 Register as a Tenant</h2>
+    <p class="text-center subtitle">Find your perfect room</p>
+
+    <form method="POST" action="{% url 'tenant:register' %}">
+        {% csrf_token %}
+
+        <!-- ========================================================= -->
+        <!-- PERSONAL INFORMATION                                       -->
+        <!-- ========================================================= -->
+        <h3>Personal Information</h3>
+        <hr>
+
+        <div class="form-group">
+            <label for="full_name">Full Name *</label>
+            <input type="text" id="full_name" name="full_name" placeholder="e.g., Lesedi sego" required>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email Address *</label>
+            <input type="email" id="email" name="email" placeholder="e.g., lesedi@gmail.com" required>
+            <div class="help-text">This will be used for login</div>
+        </div>
+
+        <div class="form-group">
+            <label for="phone_number">Phone Number *</label>
+            <input type="tel" id="phone_number" name="phone_number" placeholder="e.g., 071 234 5678" required>
+            <div class="help-text">South African phone number</div>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password *</label>
+            <input type="password" id="password" name="password" placeholder="Enter password" required>
+            <div class="help-text">Minimum 8 characters with at least one number</div>
+        </div>
+
+        <div class="form-group">
+            <label for="confirm_password">Confirm Password *</label>
+            <input type="password" id="confirm_password" name="confirm_password" placeholder="Re-enter password" required>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- TERMS & SUBMIT                                            -->
+        <!-- ========================================================= -->
+        <div class="form-group">
+            <input type="checkbox" id="terms" name="terms" required>
+            <label for="terms" style="display:inline; font-weight:normal;">
+                I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+            </label>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Register as Tenant</button>
+    </form>
+
+    <p class="text-center mt-3">
+        Already have an account? <a href="{% url 'tenant:login' %}">Login here</a>
+    </p>
+</div>
+
+{% endblock %}

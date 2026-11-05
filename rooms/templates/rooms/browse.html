@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Available Rental Rooms</h1>
+    <div class="row">
+        {% for room in rooms %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ room.address }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ room.city }}, {{ room.province }}</h6>
+                        <hr>
+                        <p class="card-text"><strong>Monthly Rent:</strong> R{{ room.price }}</p>
+                        
+                        <!-- ➕ DEPOSIT AMOUNT DISPLAY: -->
+                        <p class="card-text"><strong>Deposit:</strong> R{{ room.deposit_amount }}</p>
+                        
+                        <p class="card-text">{{ room.description|truncatewords:15 }}</p>
+                        
+                        <!-- ➕ WI-FI STATUS BADGE: -->
+                        <div class="my-3">
+                            {% if room.has_wifi %}
+                                <span class="badge bg-success">📶 Wi-Fi Included</span>
+                            {% else %}
+                                <span class="badge bg-secondary">No Wi-Fi</span>
+                            {% endif %}
+                        </div>
+                        
+                        <a href="{% url 'rooms:detail' room.id %}" class="btn btn-primary w-100">View Details</a>
+
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <div class="alert alert-info">No rental rooms are currently listed. Check back later!</div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+{% if room.has_wifi %}
+    <span class="badge bg-success">
+        <i class="bi bi-wifi"></i> Wi‑Fi Included
+    </span>
+{% else %}
+    <span class="badge bg-secondary">
+        <i class="bi bi-wifi-off"></i> No Wi‑Fi
+    </span>
+{% endif %}
+
+<div class="my-3">
+    {% if room.has_wifi %}
+        <span class="badge bg-success">
+            <i class="bi bi-wifi"></i> Wi‑Fi Included
+        </span>
+    {% else %}
+        <span class="badge bg-secondary">
+            <i class="bi bi-wifi-off"></i> No Wi‑Fi
+        </span>
+    {% endif %}
+</div>

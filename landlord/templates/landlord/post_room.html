@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="card" style="max-width: 750px; margin: 0 auto;">
+    <h2>Post a Room</h2>
+    <p class="subtitle">Fill in the details below to list your room. It will be reviewed by an admin before it becomes visible to tenants.</p>
+
+    <form method="POST" enctype="multipart/form-data" action="{% url 'landlord:post_room' %}">
+        {% csrf_token %}
+
+        <!-- ========================================================= -->
+        <!-- ROOM DETAILS                                              -->
+        <!-- ========================================================= -->
+        <h3 style="font-size: 1.1rem; font-weight: 600; margin-top: 1.8rem; margin-bottom: 0.3rem; color: #222;">Room Details</h3>
+        <hr style="border: 0; border-top: 1px solid #ececec; margin: 0.8rem 0 1.5rem 0;">
+
+        <div class="form-group">
+            <label for="price">Monthly Rent (R) <span class="required-star">*</span></label>
+            <input type="number" id="price" name="price" placeholder="e.g., 2500" min="0" step="0.01" required>
+        </div>
+
+        <div class="form-group">
+            <label for="address">Street Address <span class="required-star">*</span></label>
+            <input type="text" id="address" name="address" placeholder="e.g., 123 Main Street" required>
+        </div>
+
+        <div class="form-group">
+            <label for="city">City / Suburb <span class="required-star">*</span></label>
+            <input type="text" id="city" name="city" placeholder="e.g., Mamelodi" required>
+        </div>
+
+        <div class="form-group">
+            <label for="province">Province <span class="required-star">*</span></label>
+            <select id="province" name="province" required>
+                <option value="">Select Province</option>
+                <option value="Gauteng">Gauteng</option>
+                <option value="Western Cape">Western Cape</option>
+                <option value="KwaZulu-Natal">KwaZulu-Natal</option>
+                <option value="Eastern Cape">Eastern Cape</option>
+                <option value="Free State">Free State</option>
+                <option value="Limpopo">Limpopo</option>
+                <option value="Mpumalanga">Mpumalanga</option>
+                <option value="North West">North West</option>
+                <option value="Northern Cape">Northern Cape</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="postal_code">Postal Code</label>
+            <input type="text" id="postal_code" name="postal_code" placeholder="e.g., 0122">
+        </div>
+
+        <div class="form-group">
+            <label for="bedrooms">Number of Bedrooms <span class="required-star">*</span></label>
+            <input type="number" id="bedrooms" name="bedrooms" placeholder="e.g., 1" min="1" required>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" name="description" rows="4" placeholder="e.g., Spacious room with water and electricity included. Close to taxi rank."></textarea>
+            <div class="help-text">Optional - describe the room and amenities</div>
+        </div>
+
+        <div class="form-group">
+            <label for="availability_date">Available From</label>
+            <input type="date" id="availability_date" name="availability_date">
+            <div class="help-text">Optional - leave blank if available immediately</div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- ROOM PHOTOS                                               -->
+        <!-- ========================================================= -->
+        <h3 style="font-size: 1.1rem; font-weight: 600; margin-top: 1.8rem; margin-bottom: 0.3rem; color: #222;">Room Photos</h3>
+        <hr style="border: 0; border-top: 1px solid #ececec; margin: 0.8rem 0 1.5rem 0;">
+        <p class="text-muted" style="color: #6b6b6b; font-size: 0.95rem; margin-bottom: 1.5rem;">
+            Upload clear photos of the room. You can upload multiple photos.
+        </p>
+
+        <div class="form-group">
+            <label for="photos">Upload Photos <span class="required-star">*</span></label>
+            <input type="file" id="photos" name="photos" accept=".jpg,.jpeg,.png" multiple required>
+            <div class="help-text">Accepted: JPEG, PNG (max 5MB each). Hold Ctrl to select multiple.</div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- PROOF OF OWNERSHIP                                        -->
+        <!-- ========================================================= -->
+        <h3 style="font-size: 1.1rem; font-weight: 600; margin-top: 1.8rem; margin-bottom: 0.3rem; color: #222;">Proof of Ownership</h3>
+        <hr style="border: 0; border-top: 1px solid #ececec; margin: 0.8rem 0 1.5rem 0;">
+        <p class="text-muted" style="color: #6b6b6b; font-size: 0.95rem; margin-bottom: 1.5rem;">
+            Upload an affidavit or proof that you own this property.
+        </p>
+
+        <div class="form-group">
+            <label for="affidavit">Upload Title Deed<span class="required-star">*</span></label>
+            <input type="file" id="affidavit" name="affidavit" accept=".jpg,.jpeg,.png,.pdf" required>
+            <div class="help-text">Accepted: JPEG, PNG, PDF (max 5MB)</div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SUBMIT                                                    -->
+        <!-- ========================================================= -->
+        <div style="margin-top: 2rem;">
+            <button type="submit" class="btn btn-primary btn-block">Submit Room for Approval</button>
+        </div>
+
+        <p class="text-center mt-3" style="border-top: 1px solid #efefef; padding-top: 1.8rem; color: #555;">
+            <a href="{% url 'landlord:dashboard' %}" style="color: #ff5a5f; font-weight: 500;">Back to Dashboard</a>
+        </p>
+    </form>
+</div>
+
+{% endblock %}
